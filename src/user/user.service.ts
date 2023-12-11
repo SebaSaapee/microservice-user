@@ -33,6 +33,12 @@ export class UserService {
     const newUser = new this.model({ ...userDTO, password: hash });
     return await newUser.save();
   }
+  async create2(userDTO: UserDTO): Promise<User> {
+    const hash = await this.hashPassword(userDTO.password);
+    // Cambia de 'new this.model' a 'this.model.create'
+    return this.model.create({ ...userDTO, password: hash });
+  }
+  
 
   async findAll(): Promise<IUser[]> {
     return await this.model.find();

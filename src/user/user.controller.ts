@@ -50,11 +50,23 @@ export class UserController {
     const user = await this.userService.findByUsername(payload.username);
     const isValidPassword =  await this.userService.checkPassword(payload.password, user.password);
     if(user && isValidPassword) {
-            return user;  
-    }
-    
+      return user;  
+    }    
     return null;
+  }
+  @MessagePattern(UserMSG.VALID_USER)
+  async validateUser2(@Payload() payload): Promise<any>{
+    const user = await this.userService.findByUsername(payload.username);
+    if (!user) {
+      return null;
+    }
 
-}
+    const isValidPassword = await this.userService.checkPassword(payload.password, user.password);
+    if (isValidPassword) {
+      return user;
+    }
+
+    return null;
+  }
 
 }
