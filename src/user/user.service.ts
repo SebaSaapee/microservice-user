@@ -28,7 +28,7 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
 
-  async create(userDTO: UserDTO): Promise<IUser> {
+  async create(userDTO: UserDTO): Promise<User> { // original era Promise<IUser>
     const hash = await this.hashPassword(userDTO.password);
     const newUser = new this.model({ ...userDTO, password: hash });
     return await newUser.save();
