@@ -6,6 +6,7 @@ import { UserDTO } from '../dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { USER } from '../../common/models/models';
 import { User } from '../user.model';
+import { HttpStatus } from '@nestjs/common';
 
 // Mock the Mongoose Model
 const mockModel = {
@@ -95,31 +96,7 @@ describe('UserService', () => {
         expect(hashedPassword).not.toEqual(password);
         });
     });
-
-    
-    /*
-    describe('create', () => {
-        it('should create a new user', async () => {
-          const userDTO: UserDTO = {
-            name: 'John Doe',
-            username: 'john_doe',
-            email: 'john.doe@example.com',
-            password: 'password123',
-          };
-    
-          const saltRounds = 10;
-          const hashedPassword = await bcrypt.hash(userDTO.password, saltRounds);
-          const newUser: User = { ...userDTO, password: hashedPassword };
-    
-          mockModel.mockConstructor.mockResolvedValue(newUser);
-    
-          const result = await service.create(userDTO);
-          expect(result).toEqual(newUser);
-          expect(mockModel.mockConstructor).toHaveBeenCalledWith({ ...userDTO, password: hashedPassword });
-        });
-      });
-    */
-   /*
+ 
     describe('findAll', () => {
         it('should find all users', async () => {
         const usersDTO: UserDTO[] = [
@@ -146,34 +123,8 @@ describe('UserService', () => {
         expect(mockModel.find).toHaveBeenCalled();
         });
     });
-    /*
-    describe('findAll2', () => {
-        it('should find all users using lean', async () => {
-        const usersDTO: UserDTO[] = [
-            { 
-            name: 'User1', 
-            username: 'user1', 
-            email: 'user1@example.com', 
-            password: 'password1' 
-            },
-            { 
-            name: 'User2', 
-            username: 'user2', 
-            email: 'user2@example.com', 
-            password: 'password2' 
-            },
-        ];
-
-        const users: Partial<IUser>[] = usersDTO.map(userDTO => ({ ...userDTO }));
-
-        mockModel.find.mockResolvedValue(users);
-
-        const result = await service.findAll2();
-        expect(result).toEqual(users);
-        expect(mockModel.find).toHaveBeenCalled();
-        });
-    });
-    /*
+   
+    
     describe('findOne', () => {
         it('should find a user by ID', async () => {
         const userId = 'some-user-id';
@@ -193,28 +144,38 @@ describe('UserService', () => {
         expect(mockModel.findById).toHaveBeenCalledWith(userId);
         });
     });
-    /*
+    
     describe('update', () => {
         it('should update a user', async () => {
-        const userId = 'some-user-id';
-        const userDTO: UserDTO = {
+          const userId = 'some-user-id';
+          const userDTO: UserDTO = {
             name: 'John Doe',
             username: 'john_doe',
             email: 'john.doe@example.com',
             password: 'password123',
-        };
-
-        const hashedPassword = await bcrypt.hash(userDTO.password, 10);
-        const updatedUser: Partial<IUser> = { ...userDTO, password: hashedPassword };
-
-        mockModel.findByIdAndUpdate.mockResolvedValue(updatedUser);
-
-        const result = await service.update(userId, userDTO);
-        expect(result).toEqual(updatedUser);
-        expect(mockModel.findByIdAndUpdate).toHaveBeenCalledWith(userId, updatedUser, { new: true });
+          };
+      
+          const hashedPassword = await bcrypt.hash(userDTO.password, 10);
+          const updatedUser: Partial<IUser> = { ...userDTO, password: hashedPassword };
+      
+          mockModel.findByIdAndUpdate.mockResolvedValue(updatedUser);
+      
+          const result = await service.update(userId, userDTO);
+      
+          // Verifica que se haya llamado al método con el userId y un objeto para el update
+          expect(mockModel.findByIdAndUpdate).toHaveBeenCalledWith(
+            userId,
+            expect.objectContaining({
+              name: userDTO.name,
+              username: userDTO.username,
+              email: userDTO.email,
+            }),
+            { new: true }
+          );
+          expect(result).toEqual(updatedUser);
         });
-    });
-    /*
+      });
+    
     describe('delete', () => {
         it('should delete a user', async () => {
         const userId = 'some-user-id';
@@ -227,5 +188,5 @@ describe('UserService', () => {
         expect(mockModel.findByIdAndDelete).toHaveBeenCalledWith(userId);
         });
     });
-    */
+    
 });
