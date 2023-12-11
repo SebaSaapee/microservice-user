@@ -10,6 +10,7 @@ import { UserMSG } from '../../common/constants';
 import { IUser } from '../../common/interfaces/user.interface';
 import { User } from '../user.model';
 
+// Define la interfaz IUser2 para las pruebas
 export interface IUser2 {
   name: string;
   username: string;
@@ -18,70 +19,77 @@ export interface IUser2 {
   // Cualquier otra propiedad que un usuario debería tener
 }
 
-
 describe('UserController', () => {
   let controller: UserController;
   let userService: UserService;
 
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      //controllers: [UserController],
-      imports:[UserModule],
+      imports: [UserModule],
     }).overrideProvider(getModelToken(USER.name))
-    .useValue(jest.fn())
-    .compile();
+      .useValue(jest.fn())
+      .compile();
 
     controller = module.get<UserController>(UserController);
     userService = module.get<UserService>(UserService);
   });
 
-  describe('findAll',()=>{
-    it ('must reutn an array of type User', async () => {
+  // Caso de prueba para el método 'findAll'
+  describe('findAll', () => {
+    it('debería devolver un array de tipo User', async () => {
+      // Simula el método 'findAll' de userService para resolver con un array
       jest.spyOn(userService, 'findAll').mockImplementation(() => Promise.resolve([{ name: 'users' }] as unknown as Promise<IUser[]>));
+
+      // Llama al método 'findAll' del controlador
       const result = await controller.findAll();
-      expect(result).toHaveLength(1) // La cantidad de resultados entregados es 1
-    })
-  })
-  describe('findAll',()=>{
-    it ('must reutn an array of type User', async () => {
+
+      // Espera que el array de resultado tenga longitud 1
+      expect(result).toHaveLength(1);
+    });
+
+    it('debería devolver un array de tipo User', async () => {
+      // Simula el método 'findAll' de userService para resolver con un array
       jest.spyOn(userService, 'findAll').mockImplementation(() => Promise.resolve([{ name: 'users' }] as unknown as Promise<IUser[]>));
+
+      // Llama al método 'findAll' del controlador
       const result = await controller.findAll();
-      expect(result).toEqual([USER])
-    })
-  })
-  describe('findAll',()=>{
-    it ('must reutn an array of type User', async () => {
+
+      // Espera que el array de resultado sea igual al modelo USER
+      expect(result).toEqual([USER]);
+    });
+
+    it('debería devolver un array de tipo User', async () => {
+      // Simula el método 'findAll' de userService para resolver con un array
       jest.spyOn(userService, 'findAll').mockImplementation(() => Promise.resolve([{ name: 'users' }] as unknown as Promise<IUser[]>));
+
+      // Llama al método 'findAll' del controlador
       const result = await controller.findAll();
-      expect(userService.findAll).toHaveBeenCalledTimes(1)//que solo se haga 1 llamada
-    })
-  })
-  describe('findAll2', () => {
-    it('should return an array of users and call findAll2 once', async () => {
-      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
-      jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
-      const result = await controller.findAll2();
-      expect(result).toHaveLength(mockUsers.length);//asegura que el número de usuarios devueltos coincida con el número de usuarios que simulaste en tu mock.
+
+      // Espera que el método 'findAll' de userService se llame una vez
+      expect(userService.findAll).toHaveBeenCalledTimes(1);
     });
   });
+
+  // Caso de prueba para el método 'findAll2'
   describe('findAll2', () => {
-    it('should return an array of users and call findAll2 once', async () => {
-      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
+    it('debería devolver un array de usuarios y llamar a findAll2 una vez', async () => {
+      // Mock de datos de usuarios
+      const mockUsers: User[] = [{ name: 'Usuario1', username: 'usuario1', email: 'usuario1@example.com', password: 'contraseña1' }];
+
+      // Simula el método 'findAll2' de userService para resolver con mockUsers
       jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
+
+      // Llama al método 'findAll2' del controlador
       const result = await controller.findAll2();
-      expect(result).toEqual(mockUsers);//Verifica que el contenido de result sea exactamente igual al contenido de mockUsers
-    });
-  });
-  describe('findAll2', () => {
-    it('should return an array of users and call findAll2 once', async () => {
-      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
-      jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
-      const result = await controller.findAll2();
+
+      // Espera que la longitud del array de resultado coincida con el número de mockUsers
+      expect(result).toHaveLength(mockUsers.length);
+
+      // Espera que el array de resultado sea igual a mockUsers
+      expect(result).toEqual(mockUsers);
+
+      // Espera que el método 'findAll2' de userService se llame una vez
       expect(userService.findAll2).toHaveBeenCalledTimes(1);
     });
   });
 });
-
-
- 
