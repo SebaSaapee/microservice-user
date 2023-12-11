@@ -57,28 +57,38 @@ describe('UserController', () => {
       expect(userService.findAll).toHaveBeenCalledTimes(1)//que solo se haga 1 llamada
     })
   })
-  describe('findAll',()=>{
-    it ('must reutn an array of type User', async () => {
-      jest.spyOn(userService, 'findAll').mockImplementation(() => Promise.resolve([{ name: 'users' }] as unknown as Promise<IUser[]>));
-      const result = await controller.findAll();
-      expect(userService.findAll).toHaveBeenCalledTimes(1)//que solo se haga 1 llamada
-    })
-  })
+
+  describe('findAll2', () => {
+    it('should return an array of users and call findAll2 once', async () => {
+      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
+      jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
+
+      const result = await controller.findAll2();
+
+      expect(result).toHaveLength(mockUsers.length);//asegura que el número de usuarios devueltos coincida con el número de usuarios que simulaste en tu mock.
+    });
+  });
+  describe('findAll2', () => {
+    it('should return an array of users and call findAll2 once', async () => {
+      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
+      jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
+
+      const result = await controller.findAll2();
+
+      expect(result).toEqual(mockUsers);//Verifica que el contenido de result sea exactamente igual al contenido de mockUsers
+    });
+  });
+  describe('findAll2', () => {
+    it('should return an array of users and call findAll2 once', async () => {
+      const mockUsers: User[] = [{ name: 'User1', username: 'user1', email: 'user1@example.com', password: 'password1' }];
+      jest.spyOn(userService, 'findAll2').mockResolvedValue(mockUsers);
+
+      const result = await controller.findAll2();
+
+      expect(userService.findAll2).toHaveBeenCalledTimes(1);
+    });
+  });
 });
 
 
-  /*
-  it('must return an array of users', async () => {
-    const userArray: IUser[] = [
-      { name: 'Ejemplo', username: 'ejemplo', email: 'test@test.com', password: 'securePassword'}
-    ];
-  
-    jest.spyOn(userService, 'findAll').mockImplementation(async () => userArray);
-  
-    const result = await controller.findAll();
-  
-    expect(result).toHaveLength(userArray.length); // Verifica la longitud del array
-    expect(result).toEqual(userArray); // Verifica que el resultado sea igual al array de usuarios
-    //expect(userService.findAll).toHaveBeenCalledTimes(1); // Verifica que se haya llamado una vez
-  });
-  */
+ 

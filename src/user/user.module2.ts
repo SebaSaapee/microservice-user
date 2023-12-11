@@ -10,7 +10,7 @@ import { User } from './user.model';
   imports: [
     MongooseModule.forFeatureAsync([
       {
-        name: User.name,
+        name: USER.name,
         useFactory: () => UserSchema,
       },
     ]),

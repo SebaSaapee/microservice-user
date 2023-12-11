@@ -5,14 +5,14 @@ import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { USER } from '../common/models/models';
 import { Model } from 'mongoose';
-import { User } from './user.model';
+import { User, UserDocument } from './user.model';
 
 @Injectable()
 export class UserService {
-  constructor(
-    
-    @InjectModel(USER.name) 
-    private readonly model: Model<IUser>
+  userModel: Model<UserDocument>;
+  constructor(    
+    @InjectModel(USER.name) private readonly model: Model<IUser>,
+    //@InjectModel(User.name) private userModel: Model<UserDocument>
     ) {}
 
   async checkPassword(password: string, passwordDB: string): Promise<boolean> {
@@ -39,7 +39,7 @@ export class UserService {
   }
   
   async findAll2(): Promise<User[]> {    
-    return await this.model.find();
+    return this.userModel.find().lean() as unknown as Promise<User[]> ;
   }
 
   async findOne(id: string): Promise<IUser> {
