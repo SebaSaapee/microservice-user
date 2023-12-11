@@ -1,14 +1,19 @@
 import { UserDTO } from './dto/user.dto';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { IUser } from 'src/common/interfaces/user.interface';
+import { IUser } from '../common/interfaces/user.interface';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
-import { USER } from 'src/common/models/models';
+import { USER } from '../common/models/models';
 import { Model } from 'mongoose';
+import { User } from './user.model';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(USER.name) private readonly model: Model<IUser>) {}
+  constructor(
+    
+    @InjectModel(USER.name) 
+    private readonly model: Model<IUser>
+    ) {}
 
   async checkPassword(password: string, passwordDB: string): Promise<boolean> {
     return await bcrypt.compare(password, passwordDB);
@@ -30,6 +35,10 @@ export class UserService {
   }
 
   async findAll(): Promise<IUser[]> {
+    return await this.model.find();
+  }
+  
+  async findAll2(): Promise<User[]> {    
     return await this.model.find();
   }
 

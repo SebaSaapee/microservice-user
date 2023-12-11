@@ -9,14 +9,14 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { UserMSG } from 'src/common/constants';
+import { UserMSG } from '../common/constants';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  
   @MessagePattern(UserMSG.CREATE)
   create(@Payload() userDTO: UserDTO) {
     return this.userService.create(userDTO);
@@ -25,6 +25,10 @@ export class UserController {
   @MessagePattern(UserMSG.FIND_ALL)
   findAll() {
     return this.userService.findAll();
+  }
+  @MessagePattern(UserMSG.FIND_ALL2)
+  findAll2() {
+    return this.userService.findAll2();
   }
 
   @MessagePattern(UserMSG.FIND_ONE)
