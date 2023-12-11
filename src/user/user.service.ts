@@ -46,7 +46,7 @@ export class UserService {
     return await this.model.findById(id);
   }
 
-  async update(id: string, userDTO: UserDTO): Promise<IUser> {
+  async update(id: string, userDTO: UserDTO): Promise<User> {
     const hash = await this.hashPassword(userDTO.password);
     const user = { ...userDTO, password: hash };
     return await this.model.findByIdAndUpdate(id, user, { new: true });

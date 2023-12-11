@@ -16,9 +16,14 @@ describe('UserController', () => {
             {
             provide: UserService,
             useValue: {
-                findAll2: jest.fn(),
                 create: jest.fn(),
-                // ... otros métodos a mockear
+                findAll: jest.fn(),
+                findAll2: jest.fn(),
+                findOne: jest.fn(),
+                update: jest.fn(),
+                delete: jest.fn(),
+                findByUsername: jest.fn(),
+                checkPassword: jest.fn(),
             },
             },
         ],
@@ -26,6 +31,10 @@ describe('UserController', () => {
 
         controller = module.get<UserController>(UserController);
         userService = module.get<UserService>(UserService);
+    });
+
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
     });
 
     it('should be defined', () => {
@@ -48,16 +57,16 @@ describe('UserController', () => {
     describe('create', () => {
         it('should call UserService to create a user', async () => {
         const userDTO: UserDTO = {
-            name: '',
-            username: '',
-            email: '',
-            password: ''
+            name: 'User',
+            username: 'User',
+            email: 'User',
+            password: 'User'
         };
         const createdUser: User = {
-            name: '',
-            username: '',
-            email: '',
-            password: ''
+            name: 'User',
+            username: 'User',
+            email: 'User',
+            password: 'User'
         };
     
         jest.spyOn(userService, 'create').mockResolvedValue(createdUser);
@@ -67,4 +76,52 @@ describe('UserController', () => {
         expect(userService.create).toBeCalledWith(userDTO);
         });
     });
+
+    // Create
+    describe('create', () => {
+        it('should call UserService to create a user', async () => {
+            const userDTO: UserDTO = {
+                name: 'User',
+                username: 'User',
+                email: 'User',
+                password: 'User'
+            };
+            const createdUser= {
+                name: '',
+                username: '',
+                email: '',
+                password: ''
+            };
+    
+          jest.spyOn(userService, 'create').mockResolvedValue(createdUser);
+    
+          const result = await controller.create(userDTO);
+          expect(result).toEqual(createdUser);
+          expect(userService.create).toBeCalledWith(userDTO);
+        });
+      });
+      //update
+      describe('update', () => {
+        it('should call UserService to update a user', async () => {
+          const userId = 'some-user-id';
+          const userDTO: UserDTO = {
+              name: '',
+              username: '',
+              email: '',
+              password: ''
+          };
+          const updatedUser = {
+            name: '',
+            username: '',
+            email: '',
+            password: ''
+        };
+    
+          jest.spyOn(userService, 'update').mockResolvedValue(updatedUser);
+    
+          const result = await controller.update({ id: userId, userDTO });
+          expect(result).toEqual(updatedUser);
+          expect(userService.update).toBeCalledWith(userId, userDTO);
+        });
+      });
 });
